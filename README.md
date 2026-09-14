@@ -8,6 +8,16 @@ A public, sanitized engineering notebook for Ayden Lotter’s segmented home net
 
 A home network becomes an infrastructure problem when it also runs virtual machines, storage, and public-facing services. Management access, general clients, servers, and IoT should be distinguishable, and an outage needs a repeatable investigation path—not a collection of blind restarts.
 
+## What I built and operate
+
+- Four VLANs on UniFi infrastructure, with DHCP, static addressing, and firewall rules.
+- Linux hosts, Proxmox workloads, and NAS storage.
+- Fiber links and CAT6 termination/testing.
+- Private-LAN AI serving with Docker, vLLM, and OpenWebUI on DGX Spark.
+- A separate public application, DisData, exposed through Cloudflare Tunnel.
+
+Explore the topology, service paths, and troubleshooting evidence below.
+
 ## Architecture
 
 ![Sanitized network topology](assets/network-topology.png)
@@ -28,17 +38,21 @@ flowchart TD
 
 This is a logical overview, not a switch-port map or exported configuration. The lab includes Proxmox, Linux hosts, NAS storage, and NVIDIA DGX Spark. Device-to-VLAN assignments, IP addresses, firewall exports, and administration endpoints are intentionally omitted.
 
-## What I built and operate
+## How I troubleshoot it
 
-- Four VLANs on UniFi infrastructure, with DHCP, static addressing, and firewall rules.
-- Linux hosts, Proxmox workloads, and NAS storage.
-- Fiber links and CAT6 termination/testing.
-- Private-LAN AI serving with Docker, vLLM, and OpenWebUI on DGX Spark.
-- A separate public application, DisData, exposed through Cloudflare Tunnel.
+Start with the failure’s scope: one client, one VLAN, one host, or every service? Check link and addressing before chasing application logs. Compare a local service check with a client-network check and then public access. Capture evidence before modifying a firewall or restarting a process.
 
-These are documented on the linked portfolio. This repository makes the topology and troubleshooting method reviewable; it is not infrastructure-as-code for the complete live environment.
+The [runbook](docs/connectivity-runbook.md) records the questions, commands, and interpretation. The [DisData write-up](https://github.com/GraniteCanyon/disdata-technical) shows why a public endpoint failure does not necessarily mean the application has failed.
 
-## Repository map
+## Run and inspect
+
+Python 3.11+; standard library only:
+
+```sh
+python3 -m unittest discover -s tests -v
+```
+
+The checks validate repository consistency only. They do not connect to the lab or certify its isolation. Follow the runbook to validate real connectivity with authorization.
 
 | Artifact | Purpose |
 | --- | --- |
@@ -49,11 +63,15 @@ These are documented on the linked portfolio. This repository makes the topology
 | [Example inventory](examples/inventory.json) | Documentation-only fixture without live host identifiers |
 | [Repository checks](tests/test_repository.py) | Inventory, VLAN, and internal-link consistency |
 
-## How I troubleshoot it
+![Actual captured repository test output](assets/tests-passing.png)
 
-Start with the failure’s scope: one client, one VLAN, one host, or every service? Check link and addressing before chasing application logs. Compare a local service check with a client-network check and then public access. Capture evidence before modifying a firewall or restarting a process.
+Browser-rendered capture of the [real test transcript](docs/evidence/unittest-output.txt), not a terminal-emulator screenshot. These tests check documentation consistency, not live VLAN isolation.
 
-The [runbook](docs/connectivity-runbook.md) records the questions, commands, and interpretation. The [DisData write-up](https://github.com/GraniteCanyon/disdata-technical) shows why a public endpoint failure does not necessarily mean the application has failed.
+## Evidence you can inspect
+
+- [Dated validation record](docs/validation-results.md): an actual LAN TCP reachability check and a documentation-snapshot restore. Source VLAN and denied-path enforcement remain unverified.
+- [Real incident: public service unreachable](docs/incidents/service-unreachable.md): symptom → scope → evidence → root cause uncertainty → correction → verification → lesson.
+- [GitHub checks](https://github.com/GraniteCanyon/homelab-infrastructure/actions/workflows/checks.yml).
 
 ## What I learned
 
@@ -64,26 +82,8 @@ The [runbook](docs/connectivity-runbook.md) records the questions, commands, and
 
 These are engineering takeaways, not claims of enterprise employment, audited compliance, or measured availability.
 
-## Validate the documentation
+## Limitations
 
-Python 3.11+; standard library only:
+This repository documents the environment; it is not infrastructure-as-code for the complete live deployment.
 
-```sh
-python3 -m unittest discover -s tests -v
-```
-
-The checks validate repository consistency only. They do not connect to the lab or certify its isolation. Follow the runbook to validate real connectivity with authorization.
-
-## Evidence you can inspect
-
-- [Dated validation record](docs/validation-results.md): an actual LAN TCP reachability check and a documentation-snapshot restore. Source VLAN and denied-path enforcement remain unverified.
-- [Real incident: public service unreachable](docs/incidents/service-unreachable.md): symptom → scope → evidence → root cause uncertainty → correction → verification → lesson.
-- [GitHub checks](https://github.com/GraniteCanyon/homelab-infrastructure/actions/workflows/checks.yml).
-
-![Actual captured repository test output](assets/tests-passing.png)
-
-Browser-rendered capture of the [real test transcript](docs/evidence/unittest-output.txt), not a terminal-emulator screenshot. These tests check documentation consistency, not live VLAN isolation.
-
-## Scope and next steps
-
-No credentials, live addressing, customer data, private configuration exports, school assignments, or fabricated incident results are included. The policy worksheet and sample inventory are examples, not proof of deployed controls. The next evidence needed is an allowed/denied-path matrix from confirmed VLAN sources and an actual service/data restore—not additional design prose.
+No credentials, live addressing, customer data, private configuration exports, school assignments, or fabricated incident results are included. The policy worksheet and sample inventory are examples, not proof of deployed controls. Source VLAN and denied-path enforcement remain unverified. The next evidence needed is an allowed/denied-path matrix from confirmed VLAN sources and an actual service/data restore—not additional design prose.
