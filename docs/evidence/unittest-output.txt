@@ -1,0 +1,12 @@
+Captured: 2026-09-14T15:06:19-07:00
+$ python3 -m unittest discover -s tests -v
+test_inventory_is_explicitly_not_live (test_repository.RepositoryTests.test_inventory_is_explicitly_not_live) ... ok
+test_policy_is_proposed (test_repository.RepositoryTests.test_policy_is_proposed) ... ok
+test_relative_markdown_links (test_repository.RepositoryTests.test_relative_markdown_links) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK
+
+Exit code: 0

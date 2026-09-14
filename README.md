@@ -10,6 +10,12 @@ A home network becomes an infrastructure problem when it also runs virtual machi
 
 ## Architecture
 
+![Sanitized network topology](assets/network-topology.png)
+
+[Download SVG](assets/network-topology.svg) · [Download PNG](assets/network-topology.png)
+
+The editable Mermaid source remains below.
+
 ```mermaid
 flowchart TD
     Internet --> Gateway[UniFi UDM-SE]
@@ -68,6 +74,16 @@ python3 -m unittest discover -s tests -v
 
 The checks validate repository consistency only. They do not connect to the lab or certify its isolation. Follow the runbook to validate real connectivity with authorization.
 
+## Evidence you can inspect
+
+- [Dated validation record](docs/validation-results.md): an actual LAN TCP reachability check and a documentation-snapshot restore. Source VLAN and denied-path enforcement remain unverified.
+- [Real incident: public service unreachable](docs/incidents/service-unreachable.md): symptom → scope → evidence → root cause uncertainty → correction → verification → lesson.
+- [GitHub checks](https://github.com/GraniteCanyon/homelab-infrastructure/actions/workflows/checks.yml).
+
+![Actual captured repository test output](assets/tests-passing.png)
+
+Browser-rendered capture of the [real test transcript](docs/evidence/unittest-output.txt), not a terminal-emulator screenshot. These tests check documentation consistency, not live VLAN isolation.
+
 ## Scope and next steps
 
-No credentials, live addressing, customer data, private configuration exports, school assignments, or fabricated incident results are included. The policy worksheet and sample inventory are examples, not proof of deployed controls. Next useful evidence would be sanitized allowed/denied-path test results and a restore-test record; neither is claimed here.
+No credentials, live addressing, customer data, private configuration exports, school assignments, or fabricated incident results are included. The policy worksheet and sample inventory are examples, not proof of deployed controls. The next evidence needed is an allowed/denied-path matrix from confirmed VLAN sources and an actual service/data restore—not additional design prose.

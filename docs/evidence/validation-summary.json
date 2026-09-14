@@ -1,0 +1,22 @@
+{
+  "path_tests": [
+    {
+      "date": "2026-09-14T15:06:19-07:00",
+      "source_vlan": "Unverified (no switch/controller evidence)",
+      "destination_role": "Private LAN inference service",
+      "expected_result": "TCP connection accepted",
+      "actual_result": "TCP connection established",
+      "tool": "Python socket.create_connection((DESTINATION, PORT), timeout=3)",
+      "result": "PASS"
+    }
+  ],
+  "repository_restore": {
+    "date": "2026-09-14T15:06:19-07:00",
+    "scope": "Repository documentation snapshot only; NOT a VM, NAS, database, or service backup",
+    "revision": "56972cb9cedd7385722c0a45ead240b90c61d9be",
+    "archive_command": "git archive HEAD",
+    "restore_command": "tar -xf snapshot.tar -C RESTORE_DIR",
+    "readme_sha256_matches": true,
+    "restored_tests_exit_code": 0
+  }
+}
