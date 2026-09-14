@@ -1,0 +1,1 @@
+{"kind":"documentation-example","live_configuration":false,"vlans":[{"id":10,"role":"management"},{"id":20,"role":"servers"},{"id":30,"role":"clients"},{"id":40,"role":"iot"}]}

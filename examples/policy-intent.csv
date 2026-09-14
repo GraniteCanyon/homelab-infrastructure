@@ -1,0 +1,4 @@
+status,source_role,destination_role,intent,validation
+proposed-review-baseline,iot,management,deny,Test from authorized IoT client
+proposed-review-baseline,clients,servers,required service ports only,Test both allowed service and unrelated port
+proposed-review-baseline,management,servers,approved administration only,Test authorized and unauthorized sources
